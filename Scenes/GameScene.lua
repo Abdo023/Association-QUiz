@@ -131,7 +131,7 @@ function scene:create( event )
         --print( "Blocks id: "..blocksLayout.children[i].id )
     end 
 
-    --timer.performWithDelay( 7000, checkAnswer  )
+    timer.performWithDelay( 7000, checkAnswer  )
 
 end
 
