@@ -11,4 +11,5 @@ math2 = require ("Utils.math2")
 color = require ("Utils.color")
 
 local composer = require ("composer")
-composer.gotoScene("Scenes.GameScene")
+--composer.gotoScene("Scenes.GameScene")
+composer.gotoScene("Scenes.SetupScene")

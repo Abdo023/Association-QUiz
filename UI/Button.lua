@@ -6,14 +6,14 @@ function Button.new( options )
 	-- Options
 	local width = options.width or 40
 	local height = options.height or 20
-	local rectColor = options.buttonColor or {0,0,0}
+	local buttonColor = options.buttonColor or {0,0,0}
 	local labelColor = options.labelColor or {1,1,1}
 	local font = native.newFont( options.font, 16 ) or native.systemFont
 	local label = options.label or ""
 
 	-- Create rect
 	local rect = display.newRect( group, 0, 0, width, height )
-	rect:setFillColor( unpack(rectColor) )
+	rect:setFillColor( unpack(buttonColor) )
 
 	-- Create text
 	local text = display.newText( group, label, 0, 0 , font, 16 )

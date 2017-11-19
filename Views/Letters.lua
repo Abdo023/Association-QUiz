@@ -5,9 +5,10 @@ local button = require("UI.Button")
 l.letterButtons = {}
 
 function l.createLetter( letter )
+	local size = 40
 	local l = button.new({
-		width = 40,
-		height = 40,
+		width = size,
+		height = size,
 		font = "Avenir Next", 
 		label = letter
 	})

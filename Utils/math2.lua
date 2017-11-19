@@ -2,7 +2,7 @@ local math2 = {}
 
 -- Declare math libraries
 math2.sqrt = math.sqrt
-math2.rand = math.random
+math2.random = math.random
 math2.round = math.round
 math2.cos = math.cos
 math2.sin = math.sin
