@@ -3,12 +3,9 @@ local l = {}
 function l.horizontalLayout( width,offset )
 	local group = display.newGroup( )
 	group.anchorChildren = true -- In order to move children with the group
-	local rect = display.newRect( group, 0, 0, 0, 40 )
-	group.rect = rect
 	group.children = {}
 
 	function group.sort(  )
-		
 		local newOffset = 0
 		for i=1, #group.children do
 			local child = group.children[i]
@@ -22,14 +19,6 @@ function l.horizontalLayout( width,offset )
 				newOffset = newOffset + child.width + offset				
 			end
 		end
-	end
-
-	function group.setPos( x,y )
-		group.newX = x
-		group.newY = y
-		group.rect.x = x
-		group.rect.y = y
-		group.sort()
 	end
 
 	function group.add( obj )
@@ -52,6 +41,14 @@ function l.horizontalLayout( width,offset )
 		end
 		
 		group.sort()
+	end
+
+	function group.clear(  )
+		for i=1,#group.children do
+			group.children[i]:removeSelf()
+			group.children[i] = nil
+		end
+		group.children = {}
 	end
 
 	return group

@@ -15,10 +15,12 @@ local animations = require("Views.Animations")
 local drawings = require("Views.Drawing")
 local letters = require("Views.Letters")
 local questionsData = require("Data.Questions")
+local gameData = require("Data.GameData")
 
 -- UI
 local resetBtn = gameView.resetBtn()
 local questionLabel = gameView.questionLabel()
+local levelGroup = gameView.levelGroup()
 
 -- Variables
 
@@ -33,7 +35,7 @@ local answer = {} -- user selected letters will be added here
 local tag = 1 -- used to keep track of letters in answer table
 local currentBlock = 1
 
-local questions = questionsData.questions.Questions
+local questions = questionsData.questions.questions
 local currentQuestion = {}
 -- Functions
 
@@ -49,31 +51,36 @@ local function populateLetters( letters, func )
 end
 
 local function createBlocks( answer )
+    -- Re create them aggain iin order to get positioned properly        
+    topBlocksLayout = layout.horizontalLayout(120,10)
+    topBlocksLayout.x = screen.cX
+    topBlocksLayout.y = screen.cY  - 30
+    topBlocksLayout:toBack()
+    bottomBlocksLayout = layout.horizontalLayout(120,10)
+    bottomBlocksLayout.x = screen.cX
+    bottomBlocksLayout.y = screen.cY + 30
+    bottomBlocksLayout:toBack()
     local size = 40
     for i=1,#answer do
-        if answer[i] == "" then
-            local empty = display.newRect(  0, 0, size, size )
-            empty.empty = true
-            empty:setFillColor( 1,1,1 )
-            blocksLayout.add(empty)
-            --topLayout.addBlocks(empty)
+        local box = display.newRect(  0, 0, size, size )
+        box:setFillColor( color.hex("806DF7"))
+        box:setStrokeColor( 0, 0, 0 )
+        --box.strokeWidth = 1
+        --topLayout.addBlocks(box)
+        box.id = answer[i]
+        blocks[#blocks+1] = box
+        --print("Box "..box.x.." "..box.y)
+        if i < 7 then
+            topBlocksLayout.add(box)
         else
-            local box = display.newRect(  0, 0, size, size )
-            --box:setFillColor( 0,0,0 )
-            box:setStrokeColor( 0, 0, 0 )
-            box.strokeWidth = 1
-            --topLayout.addBlocks(box)
-            box.id = answer[i]
-            blocks[#blocks+1] = box
-            --print("Box "..box.x.." "..box.y)
-            if i < 7 then
-                topBlocksLayout.add(box)
-            else
-                bottomBlocksLayout.add(box)
-            end
+            bottomBlocksLayout.add(box)
         end
     end
 end
+
+local function animateLevel(  )
+    animations.levelAnimation(levelGroup.circles[gameData.levelProgress], levelGroup.line)
+end 
 
 local function shuffleArray( tbl )
     local size = #tbl
@@ -85,7 +92,14 @@ local function shuffleArray( tbl )
 end
 
 local function getQuestion( func )
-    currentQuestion = questions[1]
+    --If all questions have been used, then re-populate them and use them again
+    if #questions <= 0 then
+        questionsData.repopulateQuestions()
+        questions = questionsData.questions.questions
+    end
+    print("GameSCene Questions: "..#questions)
+    local rand = math2.random(1,#questions)
+    currentQuestion = questions[rand]
     for i=1,#currentQuestion.correct do
         print(currentQuestion.correct[i])
     end
@@ -96,6 +110,7 @@ local function getQuestion( func )
     questionLabel.text = currentQuestion.question
 end
 
+-- Used in onLetterButton()
 local function checkAnswer(  )
     for i=1,#blocks do
         if blocks[i].id == answer[i].id then
@@ -106,6 +121,7 @@ local function checkAnswer(  )
         end
         print( "Block - Answer: "..blocks[i].id, answer[i].id )
     end
+    questionsData.addUsedQuestion(currentQuestion.id)
     print( "Good" )
     return true
 end
@@ -145,6 +161,18 @@ local function reset(  )
     print("Answer Count: "..#answer)
 end
 
+local function nextQuestion( func )
+    animateLevel()
+    gameData.addLevelProgress()
+    reset()
+    topLayout.clear()
+    bottomLayout.clear()
+    topBlocksLayout.clear()
+    bottomBlocksLayout.clear()
+    blocks = {}
+    getQuestion( func )
+end
+
 -- Events
 
 local function onLetterButton( event )
@@ -167,6 +195,7 @@ local function onLetterButton( event )
         currentBlock = #answer+1
         if #answer == #blocks then
             checkAnswer()
+            nextQuestion( onLetterButton )
         end
         print( "Answer: "..btn.id )
         print("Answer Count: "..#answer)
@@ -215,7 +244,7 @@ function scene:create( event )
         print("Top: "..topLayout.children[i].x, topLayout.children[i].y)
     end   
 
-
+    --animateLevel()
     resetBtn.setAction ( onReset )
     --timer.performWithDelay( 10000, checkAnswer  )
 

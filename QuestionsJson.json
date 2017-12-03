@@ -1,5 +1,5 @@
 {
-	"Questions": [
+	"questions": [
 		{
 			"question": 
 				"Isaac Newton"
@@ -14,6 +14,36 @@
 				["G","R","A","V","I","T","Y"]
 			,
 			"id": 1
+		},
+		{
+			"question": 
+				"Great Wall"
+			,
+			"letters": 
+				["C","H","I","N","A","Y","M","Z","L","O","K","Q"]
+			,
+			"hint": 
+				"Where does this wall exist?"
+			,
+			"correct": 
+				["C","H","I","N","A"]
+			,
+			"id": 2
+		},
+		{
+			"question": 
+				"Sword"
+			,
+			"letters": 
+				["W","E","A","P","O","N","I","W","L","O","Y","C"]
+			,
+			"hint": 
+				"What is it?"
+			,
+			"correct": 
+				["W","E","A","P","O","N"]
+			,
+			"id": 3
 		},
 	]
 }

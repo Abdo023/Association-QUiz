@@ -9,9 +9,11 @@ function l.createLetter( letter )
 	local l = button.new({
 		width = size,
 		height = size,
+		buttonColor = {color.hex("227092")},
 		font = "Avenir Next", 
 		label = letter
 	})
+	l.x = -400
 	return l
 end
 
